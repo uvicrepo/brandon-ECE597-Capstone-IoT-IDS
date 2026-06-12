@@ -1,0 +1,36 @@
+DATASET_URL  = "https://github.com/uvicrepo/dataset-deadrepo/releases/download/v1.0/datasets.tar.gz"
+DATASET_DIR = "datasets"
+FLOW_DIR = "flowFeatures_datasets"
+PACKET_DIR = "packetFeatures_datasets"
+
+[FLOW_FILES]
+"benign"=[
+  "BenignTraffic.pcap_Flow.csv",
+  "BenignTraffic1.pcap_Flow.csv",
+  "BenignTraffic2.pcap_Flow.csv",
+  "BenignTraffic3.pcap_Flow.csv"
+]
+"ddos_http"=["DDoS-HTTP_Flood-.pcap_Flow.csv"]
+"dos_http"=[
+  "DoS-HTTP_Flood.pcap_Flow.csv",
+  "DoS-HTTP_Flood1.pcap_Flow.csv"
+]
+"dns_spoofing"=["DNS_Spoofing.pcap_Flow.csv"]
+"xss"=["XSS.pcap_Flow.csv"]
+"brute_force"=["DictionaryBruteForce.pcap_Flow.csv"]
+
+[PACKET_FILES]
+"benign"=[
+  "BenignTraffic.csv",
+  "BenignTraffic1.csv",
+  "BenignTraffic2.csv",
+  "BenignTraffic3.csv"
+]
+"ddos_http"=["DDoS-HTTP_Flood-.csv"]
+"dos_http"=[
+  "DoS-HTTP_Flood.csv",
+  "DoS-HTTP_Flood1.csv"
+]
+"dns_spoofing"=["DNS_Spoofing.csv"]
+"xss"=["XSS.csv"]
+"brute_force"=["DictionaryBruteForce.csv"]
