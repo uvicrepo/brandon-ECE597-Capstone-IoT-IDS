@@ -1,5 +1,5 @@
 # Downloaded datasets
-datasets/
+data/raw/
 
 # Virtual environment
 venv/

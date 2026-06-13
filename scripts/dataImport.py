@@ -5,6 +5,7 @@ import pandas as pd
 from pathlib import Path
 from dataclasses import dataclass, field
 import tomllib
+import shutil
 
 @dataclass
 class ImportSettings:
@@ -19,9 +20,10 @@ class ImportSettings:
     FLOW_PATH:Path = field(init=False)
     PACKET_PATH:Path = field(init=False)
     def __post_init__(self):
-        self.DATASET_PATH =  Path(self.DATASET_DIR)
-        self.FLOW_PATH =  Path(self.DATASET_PATH, self.FLOW_DIR)
-        self.PACKET_PATH =  Path(self.DATASET_PATH, self.PACKET_DIR)
+        repo_root = Path(__file__).resolve().parent.parent
+        self.DATASET_PATH = repo_root / self.DATASET_DIR
+        self.FLOW_PATH = self.DATASET_PATH / self.FLOW_DIR
+        self.PACKET_PATH = self.DATASET_PATH / self.PACKET_DIR
 
     @classmethod
     
@@ -58,16 +60,20 @@ def fetch_datasets(dataset_url=settings.DATASET_URL, dataset_path=settings.DATAS
     """
     if not settings.FLOW_PATH.is_dir():
         settings.DATASET_PATH.mkdir(parents=True, exist_ok=True)
-        tgz_path = Path(settings.DATASET_DIR, "datasets.tar.gz")
+        tgz_path = settings.DATASET_PATH / "datasets.tar.gz"
         # os.makedirs("datasets", exist_ok=True)
         print("Downloading dataset...")
         urllib.request.urlretrieve(dataset_url, tgz_path)
         print("Extracting...")
         dataset_tgz = tarfile.open(tgz_path)
-        # dataset_tgz.extractall(path=".")
-        dataset_tgz.extractall(path=settings.DATASET_PATH.resolve().parent)
+        dataset_tgz.extractall(path=settings.DATASET_PATH.parent)
         dataset_tgz.close()
         tgz_path.unlink()
+        # Tarball's top-level folder is named 'datasets'; move its contents into data/raw
+        extracted = settings.DATASET_PATH.parent / "datasets"
+        for child in extracted.iterdir():
+            shutil.move(str(child), str(settings.DATASET_PATH / child.name))
+        extracted.rmdir()
     else:
         print("Datasets already downloaded.")
     _convert_to_parquet()
