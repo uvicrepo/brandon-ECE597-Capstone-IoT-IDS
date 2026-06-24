@@ -75,7 +75,7 @@ def evaluate_metrics(model, eval_X, eval_y, label_encoder):
 
 
 
-# In[36]:
+# In[39]:
 
 
 def plot(model, eval_X, eval_y, X_train, label_encoder):
@@ -98,13 +98,13 @@ def plot(model, eval_X, eval_y, X_train, label_encoder):
         }).sort_values("importance", ascending=False).head(20)
         fig2, ax2 = plt.subplots(figsize=(10, 6))
         sns.barplot(data=fi_df, x="importance", y="feature", ax=ax2)
-        ax2.set_title("XGBoost — Top 20 Feature Importances")
+        ax2.set_title("XGBoost — Top 20 Important features")
         plt.tight_layout()
         plt.show()
 
 
 
-# In[37]:
+# In[40]:
 
 
 def train(
