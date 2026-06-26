@@ -104,7 +104,7 @@ def evaluate_metrics(val, pred, threshold, scores_val):
     return metrics
 
 
-# In[85]:
+# In[ ]:
 
 
 def plot(val, pred, scores_val, metrics):
@@ -126,7 +126,7 @@ def plot(val, pred, scores_val, metrics):
     if metrics["roc_auc"] is not None:
         fpr, tpr, _ = roc_curve(val, -scores_val)
         axes[1].plot(fpr, tpr, color="crimson", lw=2,
-                     label=f"ROC AUC = {metrics["roc_auc"]:.4f}")
+                     label=f"ROC AUC = {metrics['roc_auc']:.4f}")
         axes[1].plot([0, 1], [0, 1], "k--", lw=1)
         axes[1].set_xlabel("False Positive Rate")
         axes[1].set_ylabel("True Positive Rate")
