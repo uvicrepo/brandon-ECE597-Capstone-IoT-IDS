@@ -20,3 +20,4 @@ data/sampled/
 # Trained model artifacts
 saved_models/
 *.joblib
+.DS_Store
