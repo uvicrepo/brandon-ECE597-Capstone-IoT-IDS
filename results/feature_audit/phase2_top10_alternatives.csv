@@ -1,0 +1,13 @@
+feature,feature_family,supported_attacks,attack_coverage,selection_score,missing_pct,not_selected_reason
+src_ip_mac_60_count,traffic_activity_count,"['brute_force', 'ddos_http', 'dns_spoofing', 'dos_http', 'xss']",5,0.9742268041237113,0.0,Correlation conflict with channel_60_count (0.927)
+channel_30_count,traffic_activity_count,"['brute_force', 'ddos_http', 'dns_spoofing', 'dos_http', 'xss']",5,0.9731958762886598,0.0,Correlation conflict with channel_60_count (0.991)
+src_ip_60_count,traffic_activity_count,"['brute_force', 'ddos_http', 'dns_spoofing', 'dos_http', 'xss']",5,0.9494270731578605,3.9834378961018913,Correlation conflict with channel_60_count (0.948)
+src_ip_30_count,traffic_activity_count,"['brute_force', 'ddos_http', 'dns_spoofing', 'dos_http', 'xss']",5,0.9424167638795099,3.9834378961018913,Correlation conflict with channel_60_count (0.949)
+src_ip_mac_30_count,traffic_activity_count,"['brute_force', 'ddos_http', 'dns_spoofing', 'dos_http']",4,0.8738144329896907,0.0,Correlation conflict with channel_60_count (0.927)
+src_ip_mac_10_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.7785567010309278,0.0,Correlation conflict with channel_60_count (0.910)
+src_ip_mac_5_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.7655670103092783,0.0,Correlation conflict with channel_60_count (0.892)
+src_ip_10_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.761798207178479,3.9834378961018913,Correlation conflict with channel_60_count (0.930)
+channel_10_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.7591752577319587,0.0,Correlation conflict with channel_60_count (0.960)
+src_ip_5_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.7523136710960048,3.9834378961018913,Correlation conflict with channel_60_count (0.912)
+channel_5_count,traffic_activity_count,"['ddos_http', 'dns_spoofing', 'dos_http']",3,0.7455670103092783,0.0,Correlation conflict with channel_60_count (0.938)
+stream_1_var,stream_activity_variance,"['brute_force', 'dns_spoofing', 'xss']",3,0.6370588828870137,21.096104020514588,Correlation conflict with channel_1_var (0.871)

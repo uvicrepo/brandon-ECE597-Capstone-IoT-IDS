@@ -1,0 +1,6 @@
+traffic_type,packets,detected,detection_rate
+brute_force,352,340,0.9659090909090909
+ddos_http,249,71,0.285140562248996
+dns_spoofing,238,118,0.4957983193277311
+dos_http,224,84,0.375
+xss,186,17,0.0913978494623656

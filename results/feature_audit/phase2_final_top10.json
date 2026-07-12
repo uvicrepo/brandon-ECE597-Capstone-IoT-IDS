@@ -1,0 +1,12 @@
+[
+  "channel_60_count",
+  "channel_1_var",
+  "tcp_window_size",
+  "inter_arrival_time",
+  "stream_jitter_1_sum",
+  "src_ip_mac_60_mean",
+  "stream_60_count",
+  "min_e",
+  "l3_ip_dst_count",
+  "time_since_previously_displayed_frame"
+]

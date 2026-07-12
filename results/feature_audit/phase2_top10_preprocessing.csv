@@ -1,0 +1,11 @@
+feature,missing_pct,skewness,minimum_observed_value,missing_indicator,recommended_transformation
+channel_60_count,0.0,1.898239544010732,1.0,False,RobustScaler
+channel_1_var,10.906800024481258,3.6962577727237433,0.0,True,median imputation + RobustScaler
+tcp_window_size,0.0,3.432635560287627,0.0,False,RobustScaler
+inter_arrival_time,0.0,2.8108853122246256,0.0,False,RobustScaler
+stream_jitter_1_sum,3.324484008681977,74.74513232102855,1e-06,True,median imputation + log1p + RobustScaler
+src_ip_mac_60_mean,0.0,1.138081554873077,42.0,False,RobustScaler
+stream_60_count,0.0,3.3117273506591745,1.0,False,RobustScaler
+min_e,0.0,5.629307680241479,42.0,False,median imputation + log1p + RobustScaler
+l3_ip_dst_count,0.0,1.9163974824123124,1.0,False,RobustScaler
+time_since_previously_displayed_frame,0.0,292.9221493404731,0.0,False,median imputation + log1p + RobustScaler

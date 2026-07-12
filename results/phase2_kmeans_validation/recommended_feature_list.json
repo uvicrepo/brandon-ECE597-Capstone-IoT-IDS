@@ -1,0 +1,21 @@
+[
+  "src_ip_5_mean",
+  "stream_60_count",
+  "stream_jitter_60_sum",
+  "is_dns_packet",
+  "channel_10_count",
+  "http_uri_special_char_count",
+  "tcp_window_size",
+  "inter_arrival_time",
+  "max_p",
+  "user_agent_length",
+  "is_http_packet",
+  "src_ip_mac_60_var",
+  "l3_ip_dst_count",
+  "http_uri_parameter_count",
+  "highest_layer_is_tls",
+  "http_uri_xss_token_count",
+  "http_uri_has_xss_pattern",
+  "http_uri_angle_bracket_count",
+  "http_uri_percent_encoded_count"
+]

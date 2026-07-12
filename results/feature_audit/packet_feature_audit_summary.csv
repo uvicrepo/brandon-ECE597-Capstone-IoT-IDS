@@ -1,0 +1,136 @@
+feature,dtype,role,missing_pct,unique_count_in_audit_sample,dominant_value_pct,zero_pct,skewness,initial_action,reason
+stream,int64,matching_metadata,0.0,11778,5.806,2.08,2.1356717598976642,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+src_mac,str,matching_metadata,0.0,83,26.651000000000003,,,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+dst_mac,str,matching_metadata,0.0,99,29.747,,,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+src_ip,str,matching_metadata,3.9834378961018913,1170,13.099175283627076,,,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+dst_ip,str,matching_metadata,3.9834378961018913,1256,7.853644241637711,,,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+src_port,int64,port_review,0.0,13020,19.423000000000002,5.806,-0.15698093769433502,review_or_transform,"Potential service signal, but raw port numbers are identity-like."
+dst_port,int64,port_review,0.0,10565,20.596999999999998,5.806,0.5088838652440306,review_or_transform,"Potential service signal, but raw port numbers are identity-like."
+inter_arrival_time,float64,numeric_candidate,0.0,99996,0.002,0.002,2.8108853122246256,keep_candidate,No immediate exclusion rule was triggered.
+time_since_previously_displayed_frame,float64,numeric_candidate,0.0,29072,9.915000000000001,5.475,292.9221493404731,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+port_class_dst,int64,numeric_candidate,0.0,4,45.429,1.542,0.3248929441691674,keep_candidate,No immediate exclusion rule was triggered.
+l4_tcp,int64,numeric_candidate,0.0,2,78.00200000000001,21.998,-1.3520137033319548,keep_candidate,No immediate exclusion rule was triggered.
+l4_udp,int64,numeric_candidate,0.0,2,83.808,83.808,1.835536411062159,keep_candidate,No immediate exclusion rule was triggered.
+ttl,int64,numeric_candidate,0.0,91,63.895,4.452,1.406516229479908,keep_candidate,No immediate exclusion rule was triggered.
+eth_size,int64,numeric_candidate,0.0,1871,25.369999999999997,0.0,3.344310673518362,keep_candidate,No immediate exclusion rule was triggered.
+tcp_window_size,int64,numeric_candidate,0.0,3019,24.608,24.608,3.432635560287627,keep_candidate,No immediate exclusion rule was triggered.
+payload_entropy,float64,numeric_candidate,0.0,44549,42.884,42.884,-0.2232305302687153,keep_candidate,No immediate exclusion rule was triggered.
+handshake_version,str,categorical_review,0.0,3,99.62100000000001,,,encode_candidate,Low-cardinality categorical feature; explicit encoding is possible.
+handshake_cipher_suites_length,int64,numeric_candidate,0.0,26,99.62100000000001,99.62100000000001,21.376541100194373,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+handshake_ciphersuites,int64,numeric_candidate,0.0,1,100.0,0.0,0.0,drop_candidate,Constant across all currently profiled packet files.
+handshake_extensions_length,int64,numeric_candidate,0.0,38,99.62100000000001,99.62100000000001,26.46636130040956,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+tls_server,str,categorical_review,0.0,48,99.806,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+handshake_sig_hash_alg_len,int64,numeric_candidate,0.0,12,99.773,99.773,24.342360459305198,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+http_request_method,str,categorical_review,0.0,5,91.399,,,encode_candidate,Low-cardinality categorical feature; explicit encoding is possible.
+http_host,str,categorical_review,0.0,1,100.0,,,drop_candidate,Constant across all currently profiled packet files.
+http_response_code,int64,numeric_candidate,0.0,7,96.902,96.902,6.191278368637083,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+user_agent,str,categorical_review,0.0,754,91.363,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+dns_server,str,categorical_review,0.0,169,96.71499999999999,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+dns_query_type,float64,numeric_candidate,96.6990215479429,6,86.84931506849315,0.0,3.248955653250763,review_structural_missing,Very high missingness; determine whether the field is protocol-specific.
+dns_len_qry,int64,numeric_candidate,0.0,45,96.71499999999999,96.71499999999999,7.405612782456256,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+dns_interval,float64,numeric_candidate,0.0,3142,96.739,96.739,124.12096484357315,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+dns_len_ans,int64,numeric_candidate,0.0,32,98.734,98.734,21.26351512984757,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+device_mac,str,matching_metadata,0.0,83,24.337,,,metadata_only,Keep for matching/grouping; exclude from the default Phase 2 matrix.
+eth_src_oui,str,categorical_review,0.0,37,27.236,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+eth_dst_oui,str,categorical_review,0.0,39,29.747,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+payload_length,int64,numeric_candidate,0.0,1861,42.693,42.693,3.351557157183318,keep_candidate,No immediate exclusion rule was triggered.
+highest_layer,str,categorical_review,0.0,34,53.185,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+http_uri,str,categorical_review,0.0,9111,90.564,,,exclude_or_special_encode,High-cardinality categorical feature; direct one-hot encoding may be unsuitable.
+http_content_len,int64,numeric_candidate,0.0,20,96.934,96.934,33.711544235224125,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+http_content_type,str,categorical_review,0.0,8,96.934,,,encode_candidate,Low-cardinality categorical feature; explicit encoding is possible.
+icmp_type,int64,numeric_candidate,0.0,5,98.687,0.10300000000000001,10.7884596166635,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+icmp_checksum_status,int64,numeric_candidate,0.0,2,98.687,0.0,8.554353411697145,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+icmp_data_size,int64,numeric_candidate,0.0,7,99.384,0.0,13.32064772399214,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+jitter,float64,numeric_candidate,3.324484008681977,62951,5.036634781797644,0.0,212.71219763090915,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_1_count,float64,numeric_candidate,0.0,528,22.777,0.0,3.820509001823163,keep_candidate,No immediate exclusion rule was triggered.
+stream_1_mean,float64,numeric_candidate,0.0,33615,5.228,0.0,1.1178948371797996,keep_candidate,No immediate exclusion rule was triggered.
+stream_1_var,float64,numeric_candidate,21.096104020514588,44183,10.719604262978647,8.278,3.243348884647453,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_1_count,float64,numeric_candidate,3.9834378961018913,1166,15.122242223803742,0.0,2.4219918308636825,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_1_mean,float64,numeric_candidate,3.9834378961018913,46903,12.906601917360907,0.0,1.2087520453490432,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_1_var,float64,numeric_candidate,16.861777570022166,52433,20.828863487835854,16.892,9.59487496958668,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+src_ip_mac_1_count,float64,numeric_candidate,0.0,1166,17.912,0.0,2.4897396557735543,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_1_mean,float64,numeric_candidate,0.0,46902,12.332,0.0,1.2717628318128276,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_1_var,float64,numeric_candidate,16.043961599903493,52144,21.63531819510769,17.76,9.630429628246652,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+channel_1_count,float64,numeric_candidate,0.0,1481,11.871,0.0,2.4555833278955146,keep_candidate,No immediate exclusion rule was triggered.
+channel_1_mean,float64,numeric_candidate,0.0,56480,6.084,0.0,0.479006216655716,keep_candidate,No immediate exclusion rule was triggered.
+channel_1_var,float64,numeric_candidate,10.906800024481258,65160,8.804139386581035,7.759,3.6962577727237433,keep_candidate,No immediate exclusion rule was triggered.
+stream_jitter_1_sum,float64,numeric_candidate,3.324484008681977,92153,0.047671851844175224,0.0,74.74513232102855,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_1_mean,float64,numeric_candidate,3.324484008681977,95987,0.047671851844175224,0.0,117.89603364982185,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_1_var,float64,numeric_candidate,23.214752974339913,74910,0.0026697992310978215,0.001,90.44510393577424,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_5_count,float64,numeric_candidate,0.0,1164,12.328,0.0,3.552370830870753,keep_candidate,No immediate exclusion rule was triggered.
+stream_5_mean,float64,numeric_candidate,0.0,44882,5.009,0.0,0.8588842157414723,keep_candidate,No immediate exclusion rule was triggered.
+stream_5_var,float64,numeric_candidate,11.454124692986385,57492,9.34734008577425,8.195,1.9020906413868726,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_5_count,float64,numeric_candidate,3.9834378961018913,3333,7.645371959643321,0.0,1.866583889953083,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_5_mean,float64,numeric_candidate,3.9834378961018913,54019,10.145685937957886,0.0,1.1095649720768253,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_5_var,float64,numeric_candidate,10.595994475750691,63754,15.931008691907572,14.058000000000002,3.160902937528323,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_5_count,float64,numeric_candidate,0.0,3333,9.313,0.0,1.935057509022216,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_5_mean,float64,numeric_candidate,0.0,53959,9.76,0.0,1.1730885719713755,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_5_var,float64,numeric_candidate,8.445280394680472,64072,17.382866342474664,15.764,3.196281561602949,keep_candidate,No immediate exclusion rule was triggered.
+channel_5_count,float64,numeric_candidate,0.0,4493,8.019,0.0,1.6498176120058767,keep_candidate,No immediate exclusion rule was triggered.
+channel_5_mean,float64,numeric_candidate,0.0,62601,3.4709999999999996,0.0,0.4122771911463064,keep_candidate,No immediate exclusion rule was triggered.
+channel_5_var,float64,numeric_candidate,7.355465219315713,72126,7.51894412976593,6.916,1.922545038939358,keep_candidate,No immediate exclusion rule was triggered.
+stream_jitter_5_sum,float64,numeric_candidate,3.324484008681977,94256,0.047671851844175224,0.0,57.98152203355284,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_5_mean,float64,numeric_candidate,3.324484008681977,96143,0.047671851844175224,0.0,111.31019957101013,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_5_var,float64,numeric_candidate,14.44953090891996,84457,0.0023679007376010796,0.002,87.431943976312,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_10_count,float64,numeric_candidate,0.0,1569,9.921000000000001,0.0,3.7569614270869405,keep_candidate,No immediate exclusion rule was triggered.
+stream_10_mean,float64,numeric_candidate,0.0,49899,4.994,0.0,0.7774763295200806,keep_candidate,No immediate exclusion rule was triggered.
+stream_10_var,float64,numeric_candidate,7.757676338242299,63491,9.539118778539436,8.753,1.7214035529336849,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_10_count,float64,numeric_candidate,3.9834378961018913,5866,4.859337715075145,0.0,1.8012138689112087,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_10_mean,float64,numeric_candidate,3.9834378961018913,58022,7.954117302298322,0.0,1.101944190998983,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_10_var,float64,numeric_candidate,7.171500976145852,69441,13.598572236973839,12.496,2.8056894932741168,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_10_count,float64,numeric_candidate,0.0,5866,5.503,0.0,1.870390311320996,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_10_mean,float64,numeric_candidate,0.0,57982,7.600999999999999,0.0,1.1653963070080018,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_10_var,float64,numeric_candidate,4.342407660860055,69899,15.451772378247608,14.69,2.849840158795439,keep_candidate,No immediate exclusion rule was triggered.
+channel_10_count,float64,numeric_candidate,0.0,7855,7.072000000000001,0.0,1.6590099837520687,keep_candidate,No immediate exclusion rule was triggered.
+channel_10_mean,float64,numeric_candidate,0.0,66451,2.0740000000000003,0.0,0.40768667876228537,keep_candidate,No immediate exclusion rule was triggered.
+channel_10_var,float64,numeric_candidate,3.7763672472686984,76003,8.363852630919961,8.016,1.7092342978355024,keep_candidate,No immediate exclusion rule was triggered.
+stream_jitter_10_sum,float64,numeric_candidate,3.324484008681977,93879,0.047671851844175224,0.0,53.37810363841724,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_10_mean,float64,numeric_candidate,3.324484008681977,96246,0.047671851844175224,0.0,110.75556241931903,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_10_var,float64,numeric_candidate,10.837613857811784,88438,0.0022614457422630288,0.001,88.60449648667402,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_30_count,float64,numeric_candidate,0.0,2824,5.718999999999999,0.0,3.5805968459070203,keep_candidate,No immediate exclusion rule was triggered.
+stream_30_mean,float64,numeric_candidate,0.0,57079,4.941,0.0,0.6730165666500368,keep_candidate,No immediate exclusion rule was triggered.
+stream_30_var,float64,numeric_candidate,5.420292657485012,69326,7.182783381593322,6.772,1.5487819728066816,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_30_count,float64,numeric_candidate,3.9834378961018913,12744,2.2805291581194793,0.0,1.877345353818471,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_30_mean,float64,numeric_candidate,3.9834378961018913,65059,3.243395989450329,0.0,1.0800705727991495,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_30_var,float64,numeric_candidate,5.174681765808374,74942,7.087552114353782,6.664000000000001,2.3610540048026243,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_30_count,float64,numeric_candidate,0.0,12744,2.367,0.0,1.9478329422756655,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_30_mean,float64,numeric_candidate,0.0,65141,3.6220000000000003,0.0,1.143661705700635,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_30_var,float64,numeric_candidate,1.6182910484631359,75705,9.259334871281872,9.071,2.4147145453603405,keep_candidate,No immediate exclusion rule was triggered.
+channel_30_count,float64,numeric_candidate,0.0,15917,3.4840000000000004,0.0,1.764501092552363,keep_candidate,No immediate exclusion rule was triggered.
+channel_30_mean,float64,numeric_candidate,0.0,70732,2.0740000000000003,0.0,0.3891565540747637,keep_candidate,No immediate exclusion rule was triggered.
+channel_30_var,float64,numeric_candidate,1.645965515130926,79792,7.396160273916765,7.258000000000001,1.5367795682813519,keep_candidate,No immediate exclusion rule was triggered.
+stream_jitter_30_sum,float64,numeric_candidate,3.324484008681977,94168,0.047671851844175224,0.0,39.348796296244664,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_30_mean,float64,numeric_candidate,3.324484008681977,96283,0.047671851844175224,0.0,108.37642087985279,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_30_var,float64,numeric_candidate,8.545156835282816,90900,0.0011001100110011,0.001,86.1404655374165,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_60_count,float64,numeric_candidate,0.0,4540,4.861,0.0,3.3117273506591745,keep_candidate,No immediate exclusion rule was triggered.
+stream_60_mean,float64,numeric_candidate,0.0,60591,4.87,0.0,0.6472990578746218,keep_candidate,No immediate exclusion rule was triggered.
+stream_60_var,float64,numeric_candidate,4.570411560121449,71721,6.332506516438241,6.0249999999999995,1.4904235988601668,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_60_count,float64,numeric_candidate,3.9834378961018913,17285,2.1476116716205467,0.0,1.9910879052575314,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_60_mean,float64,numeric_candidate,3.9834378961018913,69869,1.6567589065181898,0.0,1.0745699355934593,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_60_var,float64,numeric_candidate,4.576310124331089,77654,4.1342032473976476,3.916,2.1764476592150395,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_60_count,float64,numeric_candidate,0.0,17285,2.098,0.0,2.06285023401304,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_60_mean,float64,numeric_candidate,0.0,70149,3.289,0.0,1.138081554873077,keep_candidate,No immediate exclusion rule was triggered.
+src_ip_mac_60_var,float64,numeric_candidate,0.8160419658450957,78400,6.455168787039097,6.383,2.2320198985135007,keep_candidate,No immediate exclusion rule was triggered.
+channel_60_count,float64,numeric_candidate,0.0,20487,2.5149999999999997,0.0,1.898239544010732,keep_candidate,No immediate exclusion rule was triggered.
+channel_60_mean,float64,numeric_candidate,0.0,73884,2.0740000000000003,0.0,0.38120684459194437,keep_candidate,No immediate exclusion rule was triggered.
+channel_60_var,float64,numeric_candidate,0.9713560399967004,81725,6.921504331633066,6.839,1.4794527986866495,keep_candidate,No immediate exclusion rule was triggered.
+stream_jitter_60_sum,float64,numeric_candidate,3.324484008681977,94754,0.047671851844175224,0.0,32.275851915743374,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_60_mean,float64,numeric_candidate,3.324484008681977,96318,0.047671851844175224,0.0,101.35570722092498,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+stream_jitter_60_var,float64,numeric_candidate,7.710886975526724,91745,0.001089977655458063,0.001,77.91290111496252,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+ntp_interval,float64,numeric_candidate,0.0,261,99.739,99.739,148.5532962967427,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+most_freq_spot,int64,numeric_candidate,0.0,453,36.276,0.607,1.1096569681815178,keep_candidate,No immediate exclusion rule was triggered.
+min_et,float64,numeric_candidate,0.0,606,47.804,0.0,5.629307680241479,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+q1,float64,numeric_candidate,0.0,2969,44.080000000000005,0.0,2.3701950223096824,keep_candidate,No immediate exclusion rule was triggered.
+min_e,float64,numeric_candidate,0.0,606,47.804,0.0,5.629307680241479,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+var_e,float64,numeric_candidate,0.0,60944,3.853,3.853,7.995967716184259,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+q1_e,float64,numeric_candidate,0.0,2969,44.080000000000005,0.0,2.3701950223096824,keep_candidate,No immediate exclusion rule was triggered.
+sum_p,float64,numeric_candidate,0.0,23997,3.1579999999999995,0.701,1.14269105548448,keep_candidate,No immediate exclusion rule was triggered.
+min_p,float64,numeric_candidate,0.0,583,48.266,22.689999999999998,5.62363507426732,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+max_p,float64,numeric_candidate,0.0,2567,19.977,0.701,2.613347553600607,keep_candidate,No immediate exclusion rule was triggered.
+med_p,float64,numeric_candidate,0.0,2629,19.547,2.161,1.304663774617301,keep_candidate,No immediate exclusion rule was triggered.
+average_p,float64,numeric_candidate,0.0,23997,3.1579999999999995,0.701,1.1426910554844802,keep_candidate,No immediate exclusion rule was triggered.
+var_p,float64,numeric_candidate,0.0,60904,4.334,4.334,7.995679393828544,transform_candidate,Strong numeric skew; compare robust scaling with log transformation.
+q3_p,float64,numeric_candidate,0.0,4481,25.438,1.004,1.0776075438043704,keep_candidate,No immediate exclusion rule was triggered.
+q1_p,float64,numeric_candidate,0.0,2906,44.829,9.762,2.368798765721891,keep_candidate,No immediate exclusion rule was triggered.
+iqr_p,float64,numeric_candidate,0.0,5664,16.250999999999998,16.250999999999998,1.3436310804055933,keep_candidate,No immediate exclusion rule was triggered.
+l3_ip_dst_count,float64,numeric_candidate,0.0,166,12.403,0.0,1.9163974824123124,keep_candidate,No immediate exclusion rule was triggered.
