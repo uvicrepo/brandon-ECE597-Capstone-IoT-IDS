@@ -22,3 +22,4 @@ saved_models/
 *.joblib
 data/processed/*.parquet
 scripts/explore_flow_matching.py
+.DS_Store
