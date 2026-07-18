@@ -20,3 +20,5 @@ data/sampled/
 # Trained model artifacts
 saved_models/
 *.joblib
+data/processed/*.parquet
+scripts/explore_flow_matching.py
