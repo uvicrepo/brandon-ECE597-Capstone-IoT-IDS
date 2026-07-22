@@ -18,7 +18,7 @@ The team has not finalized the task division yet. The repository has been initia
 | Phase 3 Supervised Learning | Flow-level classifier for false positive reduction | TBD | Not started |
 | Evaluation and Metrics | Precision, recall, F1, FPR, FNR, AUC, confusion matrices | TBD | Not started |
 | Visualization | ROC curves, PR curves, cluster plots, comparison charts | TBD | Not started |
-| Report Writing | Methodology, results, discussion, AI usage statement | Everyone | Not started |
+| Report Writing | Methodology, results, discussion, AI usage statement | Everyone | In Progress |
 | Demo Video | Execution walkthrough and result explanation | Everyone | Not started |
 
 ## Notes
