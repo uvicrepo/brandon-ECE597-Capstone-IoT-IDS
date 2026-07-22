@@ -12,7 +12,7 @@ The team has not finalized the task division yet. The repository has been initia
 |---|---|---|---|
 | Repository Setup | GitHub setup, structure, README, documentation | Bowen | In progress |
 | Data Sampling | Random packet-level and flow-level dataset generation | Brandon | Done |
-| Preprocessing | Missing values, outliers, scaling, feature selection | TBD | Not started |
+| Preprocessing | Missing values, outliers, scaling, feature selection | Brandon, | Done |
 | Phase 2 Unsupervised Detection | Packet-level anomaly detection and alert generation | TBD | Not started |
 | Flow Matching and Aggregation | Map packet alerts to flow-level records and aggregate flow IDs | Brandon | Done |
 | Phase 3 Supervised Learning | Flow-level classifier for false positive reduction | TBD | Not started |
