@@ -23,3 +23,7 @@ saved_models/
 data/processed/*.parquet
 scripts/explore_flow_matching.py
 .DS_Store
+
+.venv/
+.DS_Store
+__pycache__/
