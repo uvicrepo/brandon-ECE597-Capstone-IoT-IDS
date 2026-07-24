@@ -27,6 +27,7 @@ class ImportSettings:
         self.DATASET_PATH = repo_root / self.DATASET_DIR
         self.FLOW_PATH = self.DATASET_PATH / self.FLOW_DIR
         self.PACKET_PATH = self.DATASET_PATH / self.PACKET_DIR
+        self.PROCESSED_DATA_PATH = repo_root / self.PROCESSED_DATA_DIR
 
     @classmethod
     
