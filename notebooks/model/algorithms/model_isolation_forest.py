@@ -94,12 +94,12 @@ def evaluate_metrics(val, pred, threshold, scores_val):
         "report": report
     }
 
-    print (
+    """ print (
         f"\nAccuracy: {acc:.4f} | F1 (Attack): {f1:.4f} | "
           f"ROC-AUC: {roc_auc:.4f}"
     )
 
-    print(report)
+    print(report) """
 
     return metrics
 
@@ -184,7 +184,7 @@ def train(
 
     metrics = evaluate_metrics(y_val_binary, y_pred_binary, threshold, scores_val)
 
-    plot(y_val_binary, y_pred_binary, scores_val, metrics)
+    # plot(y_val_binary, y_pred_binary, scores_val, metrics)
 
     # Save model
     if save_path:
