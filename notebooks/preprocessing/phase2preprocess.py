@@ -55,8 +55,40 @@ def etta_preprocess(array: NDArray, to_drop:list[str], log_features:list = ["str
 
 
 
-def david_preprocess():
-    pass
+def david_preprocess(file_paths: dict, sample_rows: int|None = None):
+    label_map = {
+        "benign": "Benign", "benign_1": "Benign", "benign_2": "Benign", "benign_3": "Benign",
+        "ddos": "DDoS", "dos": "DoS", "dos_1": "DoS",
+        "dns_spoofing": "DNS_Spoofing", "brute_force": "BruteForce", "xss": "XSS",
+    }
+
+    id_cols = [
+        "stream", "src_mac", "dst_mac", "src_ip", "dst_ip",
+        "src_port", "dst_port", "device_mac", "eth_src_oui", "eth_dst_oui",
+    ]
+
+    dfs = []
+    for label, path in file_paths.items():
+        df = pd.read_csv(path, nrows=sample_rows)
+        df["Label"] = label_map.get(label, label)
+        dfs.append(df)
+        print(f"Loaded {label}: {df.shape}")
+
+    data = pd.concat(dfs, ignore_index=True)
+
+    # Drop ID columns
+    data = data.drop(columns=[c for c in id_cols if c in data.columns], errors="ignore")
+
+    # Convert all non-Label columns to numeric, non-numeric values become 0
+    feature_cols = [c for c in data.columns if c != "Label"]
+    for col in feature_cols:
+        data[col] = pd.to_numeric(data[col], errors="coerce")
+    data[feature_cols] = data[feature_cols].replace([np.inf, -np.inf], np.nan).fillna(0)
+
+    print(f"\nCombined shape: {data.shape}")
+    print(data["Label"].value_counts())
+
+    return data
 def isolation_preprocess():
     pass
 
