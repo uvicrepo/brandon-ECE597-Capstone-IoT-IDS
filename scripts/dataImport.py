@@ -13,12 +13,15 @@ class ImportSettings:
     DATASET_DIR:str
     FLOW_DIR:str
     PACKET_DIR:str
+    PROCESSED_DATA_DIR:str
     FLOW_FILES:dict[str, list[str]]
     PACKET_FILES:dict[str, list[str]]
 
     DATASET_PATH:Path = field(init=False)
+    PROCESSED_DATA_PATH:Path = field(init=False)
     FLOW_PATH:Path = field(init=False)
     PACKET_PATH:Path = field(init=False)
+
     def __post_init__(self):
         repo_root = Path(__file__).resolve().parent.parent
         self.DATASET_PATH = repo_root / self.DATASET_DIR

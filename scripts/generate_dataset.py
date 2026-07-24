@@ -281,28 +281,28 @@ def validate(df, label_col):
 
     print(df[label_col].value_counts().to_string())
 
+# I think this is a double? - Mack
+# if __name__ == "__main__":
+#     SEED = 42  # change to None for a different result each run
 
-if __name__ == "__main__":
-    SEED = 42  # change to None for a different result each run
+#     fetch_datasets()
+#     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    fetch_datasets()
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+#     print("Building WWT (packet rows matched to flow, compensated for misses)...")
+#     wwt = build_wwt(seed=SEED)
+#     validate(wwt, "pkt_label")
+#     print(f"WWT shape: {wwt.shape}, all rows flow-matched by construction "
+#           f"(flow_matched should be all True): {wwt['flow_matched'].all()}")
+#     wwt.to_parquet(OUTPUT_DIR / "combined_sample.parquet", index=False)
+#     print(f"Saved to {OUTPUT_DIR / 'combined_sample.parquet'}\n")
 
-    print("Building WWT (packet rows matched to flow, compensated for misses)...")
-    wwt = build_wwt(seed=SEED)
-    validate(wwt, "pkt_label")
-    print(f"WWT shape: {wwt.shape}, all rows flow-matched by construction "
-          f"(flow_matched should be all True): {wwt['flow_matched'].all()}")
-    wwt.to_parquet(OUTPUT_DIR / "combined_sample.parquet", index=False)
-    print(f"Saved to {OUTPUT_DIR / 'combined_sample.parquet'}\n")
-
-    print("Building independent flow-only sample (Phase 3 training set)...")
-    flow_only = build_flow_only_sample(seed=SEED)
-    validate(flow_only, "label")
-    flow_only.to_parquet(OUTPUT_DIR / "flow_training_sample.parquet", index=False)
-    print(f"Saved to {OUTPUT_DIR / 'flow_training_sample.parquet'}")
+#     print("Building independent flow-only sample (Phase 3 training set)...")
+#     flow_only = build_flow_only_sample(seed=SEED)
+#     validate(flow_only, "label")
+#     flow_only.to_parquet(OUTPUT_DIR / "flow_training_sample.parquet", index=False)
+#     print(f"Saved to {OUTPUT_DIR / 'flow_training_sample.parquet'}")
     
-    """ generate_dataset.py — produces TWO datasets per run:
+""" generate_dataset.py — produces TWO datasets per run:
 
 1. combined_sample.parquet (the "World's Widest Table" / WWT)
    Packet rows sampled per the required distribution, each one matched to
@@ -335,7 +335,8 @@ ATTACK_MIN   = 4000
 ATTACK_MAX   = 6200
 
 REPO_ROOT  = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = REPO_ROOT / "data" / "processed"
+# OUTPUT_DIR = REPO_ROOT / "data" / "processed"
+OUTPUT_DIR = settings.PROCESSED_DATA_PATH #Changed dataImport.py settings to include this path. Usefull for phase2preprocess script to have in one place
 
 ATTACK_KEYS = {
     "ddos_http":    "DDoS-HTTP Flood",
