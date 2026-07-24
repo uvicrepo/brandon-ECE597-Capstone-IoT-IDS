@@ -2,6 +2,7 @@ DATASET_URL  = "https://github.com/uvicrepo/dataset-deadrepo/releases/download/v
 DATASET_DIR = "data/raw"
 FLOW_DIR = "flowFeatures_datasets"
 PACKET_DIR = "packetFeatures_datasets"
+PROCESSED_DATA_DIR = "data/processed"
 
 [FLOW_FILES]
 "benign"=[
