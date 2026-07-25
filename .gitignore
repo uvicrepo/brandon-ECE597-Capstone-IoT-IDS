@@ -17,13 +17,18 @@ __pycache__/
 data/raw/
 data/sampled/
 
-# Trained model artifacts
-saved_models/
+# Trained model artifacts and caches
 *.joblib
+**/saved_models/
+data/sampled/
 data/processed/*.parquet
 scripts/explore_flow_matching.py
 .DS_Store
+.venv/
+__pycache__/
+
 
 .venv/
 .DS_Store
 __pycache__/
+

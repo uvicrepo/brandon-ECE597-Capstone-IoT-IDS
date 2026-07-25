@@ -4,32 +4,29 @@
 # In[ ]:
 
 
+import os
+import joblib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import joblib
-import os
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import (
-    accuracy_score, f1_score, classification_report,
-    confusion_matrix, roc_auc_score, average_precision_score,
-    roc_curve
-)
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
 
 
 # In[ ]:
 
 
 def build_random_forest(
-    n_estimators: int = 200,
+    n_estimators=200,
     max_depth=None,
-    min_samples_split: int = 2,
-    min_samples_leaf: int = 1,
-    max_features: str = "sqrt",
-    class_weight: str = "balanced",
-    random_state: int = 42
+    min_samples_split=2,
+    min_samples_leaf=1,
+    max_features="sqrt",
+    class_weight="balanced",
+    random_state=42,
 ):
     return RandomForestClassifier(
         n_estimators=n_estimators,
@@ -39,40 +36,30 @@ def build_random_forest(
         max_features=max_features,
         class_weight=class_weight,
         n_jobs=-1,
-        random_state=random_state
+        random_state=random_state,
     )
 
 
 # In[ ]:
 
 
-def evaluate_metrics(val, pred, proba_attack):
-    acc    = accuracy_score(val, pred)
-    f1     = f1_score(val, pred, average="binary", zero_division=0)
+def evaluate_metrics(y_true, y_pred, label_encoder):
+    acc = accuracy_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred, average="macro", zero_division=0)
     report = classification_report(
-        val, pred,
-        target_names=["Benign", "Attack"],
-        zero_division=0
+        y_true,
+        y_pred,
+        target_names=label_encoder.classes_,
+        zero_division=0,
     )
-
-    try:
-        roc_auc  = roc_auc_score(val, proba_attack)
-        avg_prec = average_precision_score(val, proba_attack)
-    except Exception:
-        roc_auc = avg_prec = None
 
     metrics = {
-        "accuracy":      acc,
-        "f1_binary":     f1,
-        "roc_auc":       roc_auc,
-        "avg_precision": avg_prec,
-        "report":        report
+        "accuracy": acc,
+        "f1_macro": f1,
+        "report": report,
     }
 
-    print(
-        f"\nAccuracy: {acc:.4f} | F1 (Attack): {f1:.4f} | "
-        f"ROC-AUC: {roc_auc:.4f}"
-    )
+    print(f"\nAccuracy: {acc:.4f} | F1-macro: {f1:.4f}")
     print(report)
     return metrics
 
@@ -80,39 +67,42 @@ def evaluate_metrics(val, pred, proba_attack):
 # In[ ]:
 
 
-def plot(val, pred, proba_attack, metrics):
-    fig, axes = plt.subplots(1, 3, figsize=(20, 5))
+def plot(y_true, y_pred, label_encoder, model=None, X_train=None):
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Confusion matrix
-    cm = confusion_matrix(val, pred)
+    cm = confusion_matrix(y_true, y_pred)
     sns.heatmap(
-        cm, annot=True, fmt="d", cmap="YlOrRd",
-        xticklabels=["Benign", "Attack"],
-        yticklabels=["Benign", "Attack"],
-        ax=axes[0]
+        cm,
+        annot=True,
+        fmt="d",
+        cmap="YlOrRd",
+        xticklabels=label_encoder.classes_,
+        yticklabels=label_encoder.classes_,
+        ax=axes[0],
     )
     axes[0].set_title("Confusion Matrix")
     axes[0].set_xlabel("Predicted")
     axes[0].set_ylabel("Actual")
 
-    # ROC curve
-    if metrics["roc_auc"] is not None:
-        fpr, tpr, _ = roc_curve(val, proba_attack)
-        axes[1].plot(fpr, tpr, color="steelblue", lw=2,
-                     label=f"ROC AUC = {metrics['roc_auc']:.4f}")
-        axes[1].plot([0, 1], [0, 1], "k--", lw=1)
-        axes[1].set_xlabel("False Positive Rate")
-        axes[1].set_ylabel("True Positive Rate")
-        axes[1].set_title("ROC Curve")
-        axes[1].legend()
+    if model is not None and hasattr(model, "feature_importances_"):
+        importances = model.feature_importances_
+        top_k = min(20, len(importances))
+        top_idx = np.argsort(importances)[-top_k:]
 
-    # Feature importances (top 20)
-    importances = metrics.get("feature_importances")
-    if importances is not None:
-        top_idx = np.argsort(importances)[-20:]
-        axes[2].barh(range(20), importances[top_idx], color="steelblue")
-        axes[2].set_title("Top 20 Feature Importances")
-        axes[2].set_xlabel("Importance")
+        if X_train is not None and hasattr(X_train, "columns"):
+            feature_names = np.array(X_train.columns)[top_idx]
+        else:
+            feature_names = np.array([f"feature_{i}" for i in top_idx])
+
+        axes[1].barh(range(top_k), importances[top_idx], color="steelblue")
+        axes[1].set_yticks(range(top_k))
+        axes[1].set_yticklabels(feature_names)
+        axes[1].set_title(f"Top {top_k} Feature Importances")
+        axes[1].set_xlabel("Importance")
+    else:
+        axes[1].set_title("Feature Importances")
+        axes[1].text(0.5, 0.5, "Not available", ha="center", va="center")
+        axes[1].set_axis_off()
 
     plt.tight_layout()
     plt.show()
@@ -123,62 +113,64 @@ def plot(val, pred, proba_attack, metrics):
 
 def train(
     X_train, y_train,
-    X_val,   y_val,
-    normal_label: str = "Benign",
-    model_kwargs: dict = None,
-    save_path: str = None
+    X_val, y_val,
+    normal_label="Benign",
+    model_kwargs=None,
+    save_path=None,
 ):
+    print("\nRANDOM FOREST\n" + "=" * 13)
     kwargs = model_kwargs or {}
 
-    # Binary labels: 0 = Benign, 1 = Attack
-    y_train_binary = (np.array(y_train) != normal_label).astype(int)
-    y_val_binary   = (np.array(y_val)   != normal_label).astype(int)
+    X_train_arr = np.asarray(X_train)
+    X_val_arr = np.asarray(X_val)
 
-    n_benign = (y_train_binary == 0).sum()
-    n_attack = (y_train_binary == 1).sum()
-    print(
-        f"Training on {len(y_train_binary):,} samples "
-        f"({n_benign:,} benign, {n_attack:,} attack)."
-    )
+    le = LabelEncoder()
+    y_train_enc = le.fit_transform(np.asarray(y_train))
+    y_val_enc = le.transform(np.asarray(y_val))
+
+    print(f"Training on {len(y_train_enc):,} samples across {len(le.classes_)} classes.")
+    print("Classes:", list(le.classes_))
 
     model = build_random_forest(**kwargs)
-    model.fit(np.array(X_train), y_train_binary)
-    print("Random Forest fitted.")
+    model.fit(X_train_arr, y_train_enc)
 
-    # Evaluate on validation set
-    proba_attack = model.predict_proba(np.array(X_val))[:, 1]
-    y_pred_binary = model.predict(np.array(X_val))
+    y_pred_enc = model.predict(X_val_arr)
+    metrics = evaluate_metrics(y_val_enc, y_pred_enc, le)
+    #plot(y_val_enc, y_pred_enc, le, model=model, X_train=X_train)
 
-    metrics = evaluate_metrics(y_val_binary, y_pred_binary, proba_attack)
-    metrics["feature_importances"] = model.feature_importances_
-
-    plot(y_val_binary, y_pred_binary, proba_attack, metrics)
+    print("Random forest done training...")
 
     if save_path:
         os.makedirs(os.path.dirname(save_path) or ".", exist_ok=True)
         joblib.dump(
-            {"model": model, "normal_label": normal_label},
-            save_path
+            {
+                "model": model,
+                "label_encoder": le,
+                "normal_label": normal_label,
+            },
+            save_path,
         )
         print(f"Saved > {save_path}")
 
-    return model, metrics
+    return model, metrics, le
 
 
 # In[ ]:
 
 
-def predict(
-    model,
-    X,
-    return_scores: bool = False
-):
-    X_arr         = np.array(X)
-    proba_attack  = model.predict_proba(X_arr)[:, 1]
-    attack_mask   = model.predict(X_arr).astype(bool)
-    labels        = np.where(attack_mask, "Attack", "Benign")
+def predict(model, X, label_encoder=None, return_scores=False):
+    X_arr = np.asarray(X)
+    proba = model.predict_proba(X_arr)
+    pred_enc = model.predict(X_arr)
+
+    if label_encoder is not None:
+        labels = label_encoder.inverse_transform(pred_enc)
+    else:
+        labels = pred_enc
+
+    pred_score = np.max(proba, axis=1)
 
     if return_scores:
-        return labels, attack_mask, proba_attack
-    return labels, attack_mask
+        return labels, pred_enc, pred_score, proba
+    return labels, pred_enc
 
