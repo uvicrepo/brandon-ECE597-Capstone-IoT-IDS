@@ -1,3 +1,5 @@
+#Settings for importing data and generating dataset. Settings class in scripts/dataImport -> "impsettings"
+#Data importing variables
 DATASET_URL  = "https://github.com/uvicrepo/dataset-deadrepo/releases/download/v1.0/datasets.tar.gz"
 DATASET_DIR = "data/raw"
 FLOW_DIR = "flowFeatures_datasets"
@@ -35,3 +37,24 @@ PROCESSED_DATA_DIR = "data/processed"
 "dns_spoofing"=["DNS_Spoofing.csv"]
 "xss"=["XSS.csv"]
 "brute_force"=["DictionaryBruteForce.csv"]
+
+#Data generation variables:
+BENIGN_COUNT = 200000
+ATTACK_MIN   = 4000
+ATTACK_MAX   = 6200
+MAX_SAMPLE_ROUNDS = 6
+
+[ATTACK_KEYS]
+  "ddos_http"="DDoS-HTTP Flood",
+  "dos_http"="DoS-HTTP Flood",
+  "dns_spoofing"="DNS Spoofing",
+  "xss"="XSS",
+  "brute_force"="Brute Force"
+
+[EXPECTED_MATCH_RATE]
+  "benign"=0.94,
+  "ddos_http"=0.99,
+  "dos_http"=0.99,
+  "dns_spoofing"=0.92,
+  "xss"=0.86,
+  "brute_force"=0.60

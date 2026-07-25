@@ -9,6 +9,7 @@ import shutil
 
 @dataclass
 class ImportSettings:
+    """Settings for importing data and generating dataset"""
     DATASET_URL:str
     DATASET_DIR:str
     FLOW_DIR:str
@@ -16,6 +17,12 @@ class ImportSettings:
     PROCESSED_DATA_DIR:str
     FLOW_FILES:dict[str, list[str]]
     PACKET_FILES:dict[str, list[str]]
+    ATTACK_KEYS:dict[str, str]
+    EXPECTED_MATCH_RATE:dict[str, float]
+    MAX_SAMPLE_ROUNDS: int
+    BENIGN_COUNT:int
+    ATTACK_MIN:int
+    ATTACK_MAX:int
 
     DATASET_PATH:Path = field(init=False)
     PROCESSED_DATA_PATH:Path = field(init=False)
