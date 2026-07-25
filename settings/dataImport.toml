@@ -6,6 +6,12 @@ FLOW_DIR = "flowFeatures_datasets"
 PACKET_DIR = "packetFeatures_datasets"
 PROCESSED_DATA_DIR = "data/processed"
 
+#Data generation variables:
+BENIGN_COUNT = 200000
+ATTACK_MIN   = 4000
+ATTACK_MAX   = 6200
+MAX_SAMPLE_ROUNDS = 6
+
 [FLOW_FILES]
 "benign"=[
   "BenignTraffic.pcap_Flow.csv",
@@ -38,23 +44,17 @@ PROCESSED_DATA_DIR = "data/processed"
 "xss"=["XSS.csv"]
 "brute_force"=["DictionaryBruteForce.csv"]
 
-#Data generation variables:
-BENIGN_COUNT = 200000
-ATTACK_MIN   = 4000
-ATTACK_MAX   = 6200
-MAX_SAMPLE_ROUNDS = 6
-
 [ATTACK_KEYS]
-  "ddos_http"="DDoS-HTTP Flood",
-  "dos_http"="DoS-HTTP Flood",
-  "dns_spoofing"="DNS Spoofing",
-  "xss"="XSS",
+  "ddos_http"="DDoS-HTTP Flood"
+  "dos_http"="DoS-HTTP Flood"
+  "dns_spoofing"="DNS Spoofing"
+  "xss"="XSS"
   "brute_force"="Brute Force"
 
 [EXPECTED_MATCH_RATE]
-  "benign"=0.94,
-  "ddos_http"=0.99,
-  "dos_http"=0.99,
-  "dns_spoofing"=0.92,
-  "xss"=0.86,
+  "benign"=0.94
+  "ddos_http"=0.99
+  "dos_http"=0.99
+  "dns_spoofing"=0.92
+  "xss"=0.86
   "brute_force"=0.60
