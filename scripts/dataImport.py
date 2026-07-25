@@ -9,6 +9,7 @@ import shutil
 
 @dataclass
 class ImportSettings:
+    """Settings for importing data and generating dataset"""
     DATASET_URL:str
     DATASET_DIR:str
     FLOW_DIR:str
@@ -16,6 +17,12 @@ class ImportSettings:
     PROCESSED_DATA_DIR:str
     FLOW_FILES:dict[str, list[str]]
     PACKET_FILES:dict[str, list[str]]
+    ATTACK_KEYS:dict[str, str]
+    EXPECTED_MATCH_RATE:dict[str, float]
+    MAX_SAMPLE_ROUNDS: int
+    BENIGN_COUNT:int
+    ATTACK_MIN:int
+    ATTACK_MAX:int
 
     DATASET_PATH:Path = field(init=False)
     PROCESSED_DATA_PATH:Path = field(init=False)
@@ -36,15 +43,15 @@ class ImportSettings:
             data = tomllib.load(f)
         return cls(**data)
 
-settings = ImportSettings.fromTOML()
+impsettings = ImportSettings.fromTOML()
 
 def _parquet_path(csv_path:Path):
     return csv_path.with_suffix(".parquet")
 
 def _convert_to_parquet():
     all_csvs = (
-        [Path(settings.FLOW_PATH, f)   for files in settings.FLOW_FILES.values()   for f in files] +
-        [Path(settings.PACKET_PATH, f) for files in settings.PACKET_FILES.values() for f in files]
+        [Path(impsettings.FLOW_PATH, f)   for files in impsettings.FLOW_FILES.values()   for f in files] +
+        [Path(impsettings.PACKET_PATH, f) for files in impsettings.PACKET_FILES.values() for f in files]
     )
     to_convert = [p for p in all_csvs if not _parquet_path(p).is_file()]
     if not to_convert:
@@ -58,25 +65,25 @@ def _convert_to_parquet():
     print("Done.")
 
 
-def fetch_datasets(dataset_url=settings.DATASET_URL, dataset_path=settings.DATASET_PATH):
+def fetch_datasets(dataset_url=impsettings.DATASET_URL, dataset_path=impsettings.DATASET_PATH):
     """
     Fetch data from DATASET_URL configured in dataImport.toml and convert all .csv files to .parquet format.  Will save all files in a root-level directory called 'datasets'. If no such directory exists, one will be created.
     """
-    if not settings.FLOW_PATH.is_dir():
-        settings.DATASET_PATH.mkdir(parents=True, exist_ok=True)
-        tgz_path = settings.DATASET_PATH / "datasets.tar.gz"
+    if not impsettings.FLOW_PATH.is_dir():
+        impsettings.DATASET_PATH.mkdir(parents=True, exist_ok=True)
+        tgz_path = impsettings.DATASET_PATH / "datasets.tar.gz"
         # os.makedirs("datasets", exist_ok=True)
         print("Downloading dataset...")
         urllib.request.urlretrieve(dataset_url, tgz_path)
         print("Extracting...")
         dataset_tgz = tarfile.open(tgz_path)
-        dataset_tgz.extractall(path=settings.DATASET_PATH.parent)
+        dataset_tgz.extractall(path=impsettings.DATASET_PATH.parent)
         dataset_tgz.close()
         tgz_path.unlink()
         # Tarball's top-level folder is named 'datasets'; move its contents into data/raw
-        extracted = settings.DATASET_PATH.parent / "datasets"
+        extracted = impsettings.DATASET_PATH.parent / "datasets"
         for child in extracted.iterdir():
-            shutil.move(str(child), str(settings.DATASET_PATH / child.name))
+            shutil.move(str(child), str(impsettings.DATASET_PATH / child.name))
         extracted.rmdir()
     else:
         print("Datasets already downloaded.")
@@ -102,7 +109,7 @@ def load_flow(key):
     ```
     """
     print(f"Loading Flow Dataset: {key}...")
-    df = _load(settings.FLOW_FILES, settings.FLOW_PATH, key)
+    df = _load(impsettings.FLOW_FILES, impsettings.FLOW_PATH, key)
     print(f"Shape: {df.shape}")
     return df
 
@@ -121,7 +128,7 @@ def load_packet(key):
     ```
     """
     print(f"Loading Packet Dataset: {key}...")
-    df = _load(settings.PACKET_FILES, settings.PACKET_PATH, key)
+    df = _load(impsettings.PACKET_FILES, impsettings.PACKET_PATH, key)
     print(f"Shape: {df.shape}")
     return df
 
