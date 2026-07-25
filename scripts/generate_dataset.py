@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 from pathlib import Path
-from dataImport import settings, fetch_datasets
+from dataImport import impsettings, fetch_datasets
 import flowMatch as fm
 
 BENIGN_COUNT = 200000
@@ -32,7 +32,7 @@ ATTACK_MAX   = 6200
 
 REPO_ROOT  = Path(__file__).resolve().parent.parent
 # OUTPUT_DIR = REPO_ROOT / "data" / "processed"
-OUTPUT_DIR = settings.PROCESSED_DATA_PATH #Changed dataImport.py settings to include this path. Usefull for phase2preprocess script to have in one place
+OUTPUT_DIR = impsettings.PROCESSED_DATA_PATH #Changed dataImport.py settings to include this path. Usefull for phase2preprocess script to have in one place
 
 ATTACK_KEYS = {
     "ddos_http":    "DDoS-HTTP Flood",
@@ -79,8 +79,8 @@ def _load_parquet(path):
 
 
 def _load_flows_for_key(key):
-    filenames = settings.FLOW_FILES[key]
-    parts = [_load_parquet(settings.FLOW_PATH / f) for f in filenames]
+    filenames = impsettings.FLOW_FILES[key]
+    parts = [_load_parquet(impsettings.FLOW_PATH / f) for f in filenames]
     flows = pd.concat(parts, ignore_index=True) if len(parts) > 1 else parts[0]
     del parts
     gc.collect()
@@ -195,8 +195,8 @@ def build_wwt(seed=None):
     rng      = np.random.default_rng(seed)
     n_attack = int(rng.integers(ATTACK_MIN, ATTACK_MAX + 1))
 
-    benign  = _wwt_benign(settings.PACKET_FILES, settings.PACKET_PATH, rng)
-    attacks = _wwt_attacks(settings.PACKET_FILES, settings.PACKET_PATH, n_attack, rng)
+    benign  = _wwt_benign(impsettings.PACKET_FILES, impsettings.PACKET_PATH, rng)
+    attacks = _wwt_attacks(impsettings.PACKET_FILES, impsettings.PACKET_PATH, n_attack, rng)
 
     result = pd.concat([benign, attacks], ignore_index=True)
     result = result.sample(frac=1, random_state=int(rng.integers(0, 2**31))).reset_index(drop=True)
@@ -209,8 +209,8 @@ def build_wwt(seed=None):
 # ----------------------------------------------------------------------
 
 def _flow_only_benign(rng):
-    filenames = settings.FLOW_FILES["benign"]
-    parts = [_load_parquet(settings.FLOW_PATH / f) for f in filenames]
+    filenames = impsettings.FLOW_FILES["benign"]
+    parts = [_load_parquet(impsettings.FLOW_PATH / f) for f in filenames]
     raw = pd.concat(parts, ignore_index=True) if len(parts) > 1 else parts[0]
 
     collapsed = fm.collapse_flow_segments(raw)
@@ -235,8 +235,8 @@ def _flow_only_attacks(n_attack, rng):
 
     frames = []
     for key, label, n in zip(keys, labels, per_type):
-        filenames = settings.FLOW_FILES[key]
-        parts = [_load_parquet(settings.FLOW_PATH / f) for f in filenames]
+        filenames = impsettings.FLOW_FILES[key]
+        parts = [_load_parquet(impsettings.FLOW_PATH / f) for f in filenames]
         raw = pd.concat(parts, ignore_index=True) if len(parts) > 1 else parts[0]
 
         collapsed = fm.collapse_flow_segments(raw)

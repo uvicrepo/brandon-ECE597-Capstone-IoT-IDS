@@ -1,0 +1,34 @@
+DROP_FEATURES = [
+  "pkt_time_since_previously_displayed_frame",
+  "pkt_src_ip",
+  "pkt_dst_ip",
+  "pkt_src_port",
+  "pkt_dst_port",
+  "flow_Flow ID",
+  "flow_Src IP",
+  "flow_Src Port",
+  "flow_Dst IP",
+  "flow_Dst Port",
+  "flow_Timestamp",
+  "index"
+]
+
+LABEL_FEATURES = [
+  "pkt_label",
+  "flow_Label",
+  "flow_matched"
+]
+FLOW_DROP_FEATURES = [
+
+]
+FLOW_LABEL_FEATURES = [
+  "Label",
+  "label",
+  "Flow ID",
+  "Src IP",
+  "Src Port",
+  "Dst IP",
+  "Dst Port",
+  "Timestamp",
+  "index"
+]
