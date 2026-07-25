@@ -20,9 +20,10 @@ LABEL_FEATURES = [
 FLOW_DROP_FEATURES = [
 
 ]
+#  "label" removed because it's removed to be y labels
 FLOW_LABEL_FEATURES = [
   "Label",
-  "label",
+
   "Flow ID",
   "Src IP",
   "Src Port",
