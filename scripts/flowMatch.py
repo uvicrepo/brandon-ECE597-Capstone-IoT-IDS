@@ -268,7 +268,7 @@ def _add_flow_key(flow_df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ----------------------------------------------------------------------
-# Collapse multi-segment flows (same match key) into one row
+# Collapse multi-segment flows (same match key) into one row -> "Connection"
 # ----------------------------------------------------------------------
 
 def _collapse_flow_segments(flow_df: pd.DataFrame) -> pd.DataFrame:
@@ -292,8 +292,9 @@ collapse_flow_segments = _collapse_flow_segments
 # ----------------------------------------------------------------------
 
 def attach_flow_features(packet_df: pd.DataFrame,
-                          flow_df: pd.DataFrame,
-                          how: str = "left") -> pd.DataFrame:
+                            flow_df: pd.DataFrame,
+                            how: str = "left",
+                            keep_match_key: bool = False) -> pd.DataFrame:
     """
     packet_df: sampled packet rows for ONE category (e.g. one attack type)
     flow_df:   the raw, un-collapsed flow rows for that SAME category
@@ -303,6 +304,12 @@ def attach_flow_features(packet_df: pd.DataFrame,
     plus a `flow_matched` bool column.
     how="left" keeps unmatched packets (flow_ cols become NaN);
     how="inner" drops packets with no matching flow.
+
+    keep_match_key: if True, keeps the internal _match_key column in the
+    output instead of dropping it. Used by generate_dataset.py to track
+    which flow records got consumed, for de-duplication against the
+    independent flow-only sample. Never meant to reach a saved dataset
+    or a model; always stripped before parquet output.
     """
     check_columns(packet_df, flow_df)
     pkt = _add_packet_key(packet_df)
@@ -321,6 +328,8 @@ def attach_flow_features(packet_df: pd.DataFrame,
     )
     probe_col = FLOW_PREFIX + FLOW_ID_COL
     merged["flow_matched"] = merged[probe_col].notna() if how == "left" else True
+    if keep_match_key:
+        return merged
     return merged.drop(columns=[MATCH_KEY_COL])
 
 
