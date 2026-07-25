@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[14]:
 
 
 import numpy as np
@@ -21,7 +21,7 @@ from sklearn.metrics import (
 )
 
 
-# In[ ]:
+# In[15]:
 
 
 class PacketAutoencoder(nn.Module):
@@ -50,7 +50,7 @@ class PacketAutoencoder(nn.Module):
         return reconstructed, latent
 
 
-# In[ ]:
+# In[16]:
 
 
 def build_autoencoder(
@@ -64,7 +64,7 @@ def build_autoencoder(
     return PacketAutoencoder(input_dim, hidden_dims=hidden_dims, latent_dim=latent_dim)
 
 
-# In[ ]:
+# In[17]:
 
 
 def train_autoencoder(
@@ -103,7 +103,7 @@ def train_autoencoder(
     return model, loss_history
 
 
-# In[ ]:
+# In[18]:
 
 
 def compute_reconstruction_errors(model, X_tensor):
@@ -114,7 +114,7 @@ def compute_reconstruction_errors(model, X_tensor):
     return errors, latent.numpy()
 
 
-# In[ ]:
+# In[19]:
 
 
 # Find the reconstruction-error threshold that maximizes F1 on a validation set.
@@ -131,7 +131,7 @@ def _tune_threshold(errors_val, y_val_binary, n_candidates=300):
     return best_thresh, best_f1
 
 
-# In[ ]:
+# In[20]:
 
 
 def evaluate_metrics(val, pred, threshold, scores_val):
@@ -160,15 +160,15 @@ def evaluate_metrics(val, pred, threshold, scores_val):
         "report": report
     }
 
-    print(
+    """ print(
         f"\nAccuracy: {acc:.4f} | F1 (Attack): {f1:.4f} | "
         f"ROC-AUC: {roc_auc:.4f}"
     )
-    print(report)
+    print(report) """
     return metrics
 
 
-# In[ ]:
+# In[21]:
 
 
 def plot(val, pred, scores_val, metrics):
@@ -212,7 +212,7 @@ def plot(val, pred, scores_val, metrics):
     plt.show()
 
 
-# In[ ]:
+# In[22]:
 
 
 def train(
@@ -224,6 +224,9 @@ def train(
     tune_threshold=True,
     save_path: str = None
 ):
+    print("===========")
+    print("AUTOENCODER")
+    print("===========")
     model_kwargs = model_kwargs or {}
     train_kwargs = train_kwargs or {}
 
@@ -233,10 +236,12 @@ def train(
     n_total  = len(y_train)
     n_benign = mask_benign.sum()
     n_attack = n_total - n_benign
+    """
     print(
         f"Training on {n_benign:,} benign samples "
         f"(excluded {n_attack:,} attack samples)."
     )
+    """
 
     X_fit_tensor = torch.tensor(np.array(X_fit), dtype=torch.float32)
     X_val_tensor = torch.tensor(np.array(X_val), dtype=torch.float32)
@@ -244,9 +249,8 @@ def train(
     input_dim = X_fit_tensor.shape[1]
     model = build_autoencoder(input_dim, **model_kwargs)
 
-    print("Training autoencoder on benign data...")
+    #print("Training autoencoder on benign data...")
     model, loss_history = train_autoencoder(model, X_fit_tensor, **train_kwargs)
-    print("Finished training.")
 
     # Binary labels for evaluation: 0 = Benign, 1 = Attack
     y_val_binary = (np.array(y_val) != normal_label).astype(int)
@@ -265,24 +269,25 @@ def train(
     # Evaluate
     y_pred_binary = (errors_val > threshold).astype(int)
     metrics = evaluate_metrics(y_val_binary, y_pred_binary, threshold, errors_val)
-    plot(y_val_binary, y_pred_binary, errors_val, metrics)
+    #plot(y_val_binary, y_pred_binary, errors_val, metrics)
 
+    print("Autoencoder done training...")
     # Save model
     if save_path:
         os.makedirs(os.path.dirname(save_path) or ".", exist_ok=True)
         torch.save({
             "state_dict": model.state_dict(),
-            "input_dim": input_dim,
-            "model_kwargs": model_kwargs,
-            "threshold": threshold,
-            "normal_label": normal_label
+            "input_dim": int(input_dim),
+            "model_kwargs": dict(model_kwargs),
+            "threshold": float(threshold),
+            "normal_label": str(normal_label),
         }, save_path)
         print(f"Saved > {save_path}")
 
-    return model, threshold, metrics, loss_history
+    return model, threshold, metrics
 
 
-# In[ ]:
+# In[23]:
 
 
 def predict(
@@ -300,7 +305,7 @@ def predict(
     return labels, attack_mask
 
 
-# In[ ]:
+# In[24]:
 
 
 # How to call
@@ -316,6 +321,12 @@ def predict(
 # )
 
 # labels, attack_mask, scores = predict(model, X_test, threshold, return_scores=True)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:

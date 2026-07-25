@@ -145,6 +145,9 @@ def train(
     tune_threshold = True,
     save_path: str = None
 ):
+    print("================")
+    print("ISOLATION FOREST")
+    print("================")
     kwargs = model_kwargs or {}
 
     # Make binary for normal_label = True, others = False
@@ -185,6 +188,8 @@ def train(
     metrics = evaluate_metrics(y_val_binary, y_pred_binary, threshold, scores_val)
 
     # plot(y_val_binary, y_pred_binary, scores_val, metrics)
+
+    print("Isolation forest done training...")
 
     # Save model
     if save_path:

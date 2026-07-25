@@ -73,11 +73,11 @@ def evaluate_metrics(val, pred, proba_attack):
         "report":        report
     }
 
-    print(
+    """ print(
         f"\nAccuracy: {acc:.4f} | F1 (Attack): {f1:.4f} | "
         f"ROC-AUC: {roc_auc:.4f}"
     )
-    print(report)
+    print(report) """
     return metrics
 
 
@@ -165,8 +165,8 @@ def train(
 
     metrics = evaluate_metrics(y_val_binary, y_pred_binary, proba_attack)
 
-    plot(y_val_binary, y_pred_binary, proba_attack, metrics,
-         loss_curve=model.loss_curve_)
+    """ plot(y_val_binary, y_pred_binary, proba_attack, metrics,
+         loss_curve=model.loss_curve_) """
 
     if save_path:
         os.makedirs(os.path.dirname(save_path) or ".", exist_ok=True)
