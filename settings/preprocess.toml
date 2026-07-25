@@ -12,9 +12,8 @@ DROP_FEATURES = [
   "flow_Timestamp",
   "index"
 ]
-
+#pkt_label not included because it's already seperated out. Will throw error.
 LABEL_FEATURES = [
-  "pkt_label",
   "flow_Label",
   "flow_matched"
 ]
