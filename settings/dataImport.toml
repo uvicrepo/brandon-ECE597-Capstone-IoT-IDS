@@ -6,7 +6,7 @@ FLOW_DIR = "flowFeatures_datasets"
 PACKET_DIR = "packetFeatures_datasets"
 PROCESSED_DATA_DIR = "data/processed"
 
-# dataset generation variables
+#Data generation variables:
 BENIGN_COUNT = 200000
 ATTACK_MIN   = 4000
 ATTACK_MAX   = 6200
