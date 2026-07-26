@@ -12,18 +12,18 @@ DROP_FEATURES = [
   "flow_Timestamp",
   "index"
 ]
-
+#pkt_label not included because it's already seperated out. Will throw error.
 LABEL_FEATURES = [
-  "pkt_label",
   "flow_Label",
   "flow_matched"
 ]
 FLOW_DROP_FEATURES = [
 
 ]
+#  "label" removed because it's removed to be y labels
 FLOW_LABEL_FEATURES = [
   "Label",
-  "label",
+
   "Flow ID",
   "Src IP",
   "Src Port",
