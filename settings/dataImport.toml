@@ -1,5 +1,5 @@
-#Settings for importing data and generating dataset. Settings class in scripts/dataImport -> "impsettings"
-#Data importing variables
+# Settings for importing data and generating dataset.
+#data import variables
 DATASET_URL  = "https://github.com/uvicrepo/dataset-deadrepo/releases/download/v1.0/datasets.tar.gz"
 DATASET_DIR = "data/raw"
 FLOW_DIR = "flowFeatures_datasets"
