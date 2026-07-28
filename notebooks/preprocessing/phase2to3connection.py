@@ -3,8 +3,9 @@ import sys
 sys.path.append('..')
 import numpy as np
 from numpy.typing import NDArray
+from pandas import DataFrame
 
-def filter_drop(array:NDArray, label_col_idx:int) -> NDArray:
+def filter_drop(df:DataFrame, label_col_idx:int) -> NDArray:
     """Filter to rows classified as attack by phase 2 model based on
     column in pos label_col_idx. Expects attack=1 and benign=0. Drop this column. 
     Return reshaped dataset. 
@@ -13,10 +14,12 @@ def filter_drop(array:NDArray, label_col_idx:int) -> NDArray:
     like: \\
     array = filter_drop(array=_load_parquet(YOUR_PATH_HERE)..)
     """
+    if isinstance(df, DataFrame):
+        array = df.to_numpy()
     #Filter
     attack_condition = array[:, label_col_idx] == 1
-    attack_array = attack_condition[attack_condition]
+    attack_array = array[attack_condition]
     #Remove
-    attack_array = np.hstack((attack_array[:, :label_col_idx], attack_array[:, label_col_idx+1:]))
-    return attack_array
+    clean_array = np.delete(attack_array, label_col_idx, axis=1)
+    return clean_array
 
