@@ -17,7 +17,7 @@ def filter_drop(df:DataFrame, label_col_idx:int) -> NDArray:
     if isinstance(df, DataFrame):
         array = df.to_numpy()
     #Filter
-    attack_condition = array[:, label_col_idx] == 1
+    attack_condition = array[:, label_col_idx] == "Attack"
     attack_array = array[attack_condition]
     #Remove
     clean_array = np.delete(attack_array, label_col_idx, axis=1)
