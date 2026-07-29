@@ -84,7 +84,7 @@ def load_parquet(path:Path, file_name) -> np.recarray:
     """
     file = path / file_name
     df = read_parquet(file)
-    array = df.to_records()
+    array = df.to_records(index=False)
     return array
 
 #For Mack organization
@@ -182,12 +182,14 @@ def preprocess_general(array:np.recarray, split:str, settings: PreProcessSetting
     df = pd.DataFrame(array)
     if split.lower() == 'flow':
         #Drop unique ID, timestamp, and label features as these reveal identifying patterns in the data generation. \\
-        df_no_UID = df.drop(prpsettings.FLOW_DROP_FEATURES, axis=1).drop(prpsettings.FLOW_LABEL_FEATURES, axis=1)
+        #df_no_UID = df.drop(prpsettings.FLOW_DROP_FEATURES, axis=1).drop(prpsettings.FLOW_LABEL_FEATURES, axis=1)
+        df_no_UID = df.drop(prpsettings.FLOW_DROP_FEATURES, axis=1, errors="ignore").drop(prpsettings.FLOW_LABEL_FEATURES, axis=1, errors="ignore")
         df_no_UID = df_no_UID.add_prefix("flow_")
         settings.load_state()
     else:
         #Drop unique ID, timestamp, and label features as these reveal identifying patterns in the data generation. \\
-        df_no_UID = df.drop(prpsettings.DROP_FEATURES, axis=1).drop(prpsettings.LABEL_FEATURES, axis=1)
+        #df_no_UID = df.drop(prpsettings.DROP_FEATURES, axis=1).drop(prpsettings.LABEL_FEATURES, axis=1)
+        df_no_UID = df.drop(prpsettings.DROP_FEATURES, axis=1, errors="ignore").drop(prpsettings.LABEL_FEATURES, axis=1, errors="ignore")
     numeric_features = (
         df_no_UID
         .select_dtypes(include=np.number)
@@ -196,25 +198,40 @@ def preprocess_general(array:np.recarray, split:str, settings: PreProcessSetting
     )
     non_numeric = [feat for feat in df_no_UID.columns if feat not in numeric_features]
 
+    #if split.lower() == 'train':
+       # #Identify numeric features. Use Standard Normalization to reduce overfitting to high valued features \\
+       # settings.fit_scaler(df_train_numeric=df_no_UID[numeric_features])
+       # df_no_UID[numeric_features] = (df_no_UID[numeric_features] - settings.mean) / settings.std #type:ignore #suboptimal settings configuration
+       # #convert non-numeric columns to One-Hot Encodings \\
+       # settings.fit_encoder(df_no_UID[non_numeric])
+       # prpsettings.save_state()
+       # encoded = settings.encoder.transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
+       # df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
+
+    #elif split.lower() == 'test':
+       # #Identify numeric features. Use Standard Normalization to reduce overfitting to high valued features \\
+        #if settings.mean is None or settings.std is None:
+            #raise RuntimeError("settings must contain mean and std. Tip: compute split='Train' to set values")
+        #settings.load_state()
+        #df_no_UID[numeric_features] = (df_no_UID[numeric_features] - settings.mean) / settings.std
+        ##convert non-numeric columns to One-Hot Encodings \\
+        #encoded = settings.encoder.transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
+        #df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
+
     if split.lower() == 'train':
-        #Identify numeric features. Use Standard Normalization to reduce overfitting to high valued features \\
         settings.fit_scaler(df_train_numeric=df_no_UID[numeric_features])
-        df_no_UID[numeric_features] = (df_no_UID[numeric_features] - settings.mean) / settings.std #type:ignore #suboptimal settings configuration
-        #convert non-numeric columns to One-Hot Encodings \\
-        settings.fit_encoder(df_no_UID[non_numeric])
+        df_no_UID[numeric_features] = (df_no_UID[numeric_features] - settings.mean) / settings.std # type: ignore
+        df_no_UID = df_no_UID[numeric_features]  # drop non_numeric entirely
         prpsettings.save_state()
-        encoded = settings.encoder.transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
-        df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
 
     elif split.lower() == 'test':
-        #Identify numeric features. Use Standard Normalization to reduce overfitting to high valued features \\
         if settings.mean is None or settings.std is None:
             raise RuntimeError("settings must contain mean and std. Tip: compute split='Train' to set values")
         settings.load_state()
         df_no_UID[numeric_features] = (df_no_UID[numeric_features] - settings.mean) / settings.std
-        #convert non-numeric columns to One-Hot Encodings \\
-        encoded = settings.encoder.transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
-        df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
+        df_no_UID = df_no_UID[numeric_features]  # drop non_numeric entirely
+
+
     elif split.lower() == 'flow':
         if settings.mean is None or settings.std is None:
             raise RuntimeError("settings must contain mean and std. Tip: compute split='Train' to set values")
@@ -222,11 +239,20 @@ def preprocess_general(array:np.recarray, split:str, settings: PreProcessSetting
         flow_mean = settings.mean[~settings.mean.index.str.startswith('pkt_')]
         flow_std = settings.std[~settings.std.index.str.startswith('pkt_')]
         df_no_UID[numeric_features] = (df_no_UID[numeric_features] - flow_mean) / flow_std
-        #convert non-numeric columns to One-Hot Encodings \\
-        encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.int8)
-        encoder.set_output(transform="pandas")
-        encoded = encoder.fit_transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
-        df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
+        ##convert non-numeric columns to One-Hot Encodings \\
+        #encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.int8)
+        #encoder.set_output(transform="pandas")
+        #encoded = encoder.fit_transform(df_no_UID[non_numeric]) #type:ignore #suboptimal settings configuration
+        #df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded)#type:ignore #suboptimal settings configuration
+        # Reuse the SAME encoder fit on training data instead of fitting a new one
+        print("non_numeric columns in flow data:", non_numeric)
+        print("shape of non_numeric slice:", df_no_UID[non_numeric].shape)
+        if non_numeric:
+            encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.int8)
+            encoder.set_output(transform="pandas")
+            encoded = encoder.fit_transform(df_no_UID[non_numeric])
+            df_no_UID = df_no_UID.drop(columns=non_numeric).join(encoded) # type: ignore
+
     else:
         raise ValueError("split must be one of 'Train', 'Test', or 'Flow'(for phase 3 training).")
 
@@ -236,7 +262,7 @@ def preprocess_general(array:np.recarray, split:str, settings: PreProcessSetting
         .fillna(0)
         .astype(np.float32) #This is different than etta's (float64). Because generate_dataset already reduces the file to float32, so increasing to float64 is unnecessary
      ) 
-    processed_array = df_no_UID.to_records()
+    processed_array = df_no_UID.to_records(index=False)
     return processed_array
 
 def special_preprocess_autoencoder(array:np.recarray, log_features:list = ["pkt_stream_jitter_1_var"]):
@@ -252,7 +278,7 @@ def special_preprocess_autoencoder(array:np.recarray, log_features:list = ["pkt_
     for feat in log_features:
             if feat in df[numeric_features].columns:
                 df[feat] = np.log1p(df[feat].clip(lower=0))
-    processed = df.to_records()
+    processed = df.to_records(index=False)
     return processed
 
 def _preprocess_flow_tr_sample(array:np.recarray) -> np.recarray:
