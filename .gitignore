@@ -33,3 +33,5 @@ __pycache__/
 __pycache__/
 
 data/datasets/
+notebooks/model/phases/phase_2.py
+notebooks/model/phases/phase_3.py
